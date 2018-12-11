@@ -40,7 +40,14 @@ class FreeImageConan(ConanFile):
             builder.build("FreeImage.2017.vcxproj", upgrade_project=False)
 
     def unix_build(self):
-        pass
+        build_env = {}
+        if self.settings.build_type == "Debug":
+            build_env = {
+                "CFLAGS": "-Og -g -ggdb -fPIC -fexceptions -fvisibility=hidden",
+                "CXXFLAGS": "-Og -g -ggdb -fPIC -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy"
+            }
+        with tools.chdir("src"), tools.environment_append(build_env):
+            self.run("make -j %s" % tools.cpu_count())
 
     def package(self):
         self.copy("FreeImage.h", dst="include", src="src/Source", keep_path=False)
@@ -57,6 +64,8 @@ class FreeImageConan(ConanFile):
         self.copy("FreeImaged.lib", dst="lib", src="src/Win32/Debug", keep_path=False)
         self.copy("FreeImaged.dll", dst="bin", src="src/Win32/Debug", keep_path=False)
         self.copy("FreeImaged.pdb", dst="bin", src="src/Win32/Debug", keep_path=False)
+        # GNU
+        self.copy("libfreeimage-3.18.0.so", dst="lib", src="src", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
