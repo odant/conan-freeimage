@@ -25,6 +25,13 @@ class FreeImageConan(ConanFile):
     no_copy_source = False
     build_policy = "missing"
 
+    def configure(self):
+        # DLL sign
+        if self.settings.os != "Windows" or not self.options.shared:
+            del self.options.dll_sign
+        # Pure C library
+        del self.settings.compiler.libcxx
+
     def source(self):
         tools.patch(patch_file="msbuild_suffix.patch")
 
