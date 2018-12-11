@@ -3,6 +3,7 @@
 
 
 from conans import ConanFile, MSBuild, tools
+import os
 
 
 class FreeImageConan(ConanFile):
@@ -72,7 +73,10 @@ class FreeImageConan(ConanFile):
         self.copy("FreeImaged.dll", dst="bin", src="src/Win32/Debug", keep_path=False)
         self.copy("FreeImaged.pdb", dst="bin", src="src/Win32/Debug", keep_path=False)
         # GNU
-        self.copy("libfreeimage-3.18.0.so", dst="lib", src="src", keep_path=False)
+        if self.settings.os == "Linux":
+            self.copy("libfreeimage-3.18.0.so", dst="lib", src="src", keep_path=False)
+            with tools.chdir(os.path.join(self.package_folder, "lib")):
+                self.run("ln -s libfreeimage-3.18.0.so libfreeimage.so.3")
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
