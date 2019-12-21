@@ -30,7 +30,7 @@ class FreeImageConan(ConanFile):
         "dll_sign": [True, False]
     }
     default_options = "dll_sign=True"
-    exports_sources = "src/*", "msbuild_suffix.patch"
+    exports_sources = "src/*"
     no_copy_source = False
     build_policy = "missing"
 
@@ -44,9 +44,6 @@ class FreeImageConan(ConanFile):
     def build_requirements(self):
         if get_safe(self.options, "dll_sign"):
             self.build_requires("windows_signtool/[~=1.1]@%s/stable" % self.user)
-
-    def source(self):
-        tools.patch(patch_file="msbuild_suffix.patch")
 
     def build(self):
         if self.settings.compiler == "Visual Studio":
@@ -85,29 +82,26 @@ class FreeImageConan(ConanFile):
     def package(self):
         self.copy("FreeImage.h", dst="include", src="src/Source", keep_path=False)
         # MSVC
-        self.copy("FreeImage64.lib", dst="lib", src="src/x64/Release", keep_path=False)
-        self.copy("FreeImage64.dll", dst="bin", src="src/x64/Release", keep_path=False)
-        self.copy("FreeImage64.pdb", dst="bin", src="src/x64/Release", keep_path=False)
-        self.copy("FreeImage64d.lib", dst="lib", src="src/x64/Debug", keep_path=False)
-        self.copy("FreeImage64d.dll", dst="bin", src="src/x64/Debug", keep_path=False)
-        self.copy("FreeImage64d.pdb", dst="bin", src="src/x64/Debug", keep_path=False)
-        self.copy("FreeImage.lib", dst="lib", src="src/Win32/Release", keep_path=False)
-        self.copy("FreeImage.dll", dst="bin", src="src/Win32/Release", keep_path=False)
-        self.copy("FreeImage.pdb", dst="bin", src="src/Win32/Release", keep_path=False)
-        self.copy("FreeImaged.lib", dst="lib", src="src/Win32/Debug", keep_path=False)
-        self.copy("FreeImaged.dll", dst="bin", src="src/Win32/Debug", keep_path=False)
-        self.copy("FreeImaged.pdb", dst="bin", src="src/Win32/Debug", keep_path=False)
-        # Sign DLL
-        if get_safe(self.options, "dll_sign"):
-            import windows_signtool
-            pattern = os.path.join(self.package_folder, "bin", "*.dll")
-            for fpath in glob.glob(pattern):
-                fpath = fpath.replace("\\", "/")
-                for alg in ["sha1", "sha256"]:
-                    is_timestamp = True if self.settings.build_type == "Release" else False
-                    cmd = windows_signtool.get_sign_command(fpath, digest_algorithm=alg, timestamp=is_timestamp)
-                    self.output.info("Sign %s" % fpath)
-                    self.run(cmd)
+        if self.settings.os == "Windows":
+            for releasePath in [ "src/x64/Release", "src/Win32/Release" ]:
+                self.copy("FreeImage.lib", dst="lib", src=releasePath, keep_path=False)
+                self.copy("FreeImage.dll", dst="bin", src=releasePath, keep_path=False)
+                self.copy("FreeImage.pdb", dst="bin", src=releasePath, keep_path=False)
+            for debugPath in [ "src/x64/Debug", "src/Win32/Debug" ]:
+                self.copy("FreeImaged.lib", dst="lib", src=debugPath, keep_path=False)
+                self.copy("FreeImaged.dll", dst="bin", src=debugPath, keep_path=False)
+                self.copy("FreeImaged.pdb", dst="bin", src=debugPath, keep_path=False)
+            # Sign DLL
+            if get_safe(self.options, "dll_sign"):
+                import windows_signtool
+                pattern = os.path.join(self.package_folder, "bin", "*.dll")
+                for fpath in glob.glob(pattern):
+                    fpath = fpath.replace("\\", "/")
+                    for alg in ["sha1", "sha256"]:
+                        is_timestamp = True if self.settings.build_type == "Release" else False
+                        cmd = windows_signtool.get_sign_command(fpath, digest_algorithm=alg, timestamp=is_timestamp)
+                        self.output.info("Sign %s" % fpath)
+                        self.run(cmd)
         # GNU
         if self.settings.os == "Linux":
             self.copy("libfreeimage-3.18.0.so", dst="lib", src="src", keep_path=False)
