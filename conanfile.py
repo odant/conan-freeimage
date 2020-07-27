@@ -1,22 +1,14 @@
 # FreeImage Conan package
-# Dmitriy Vetutnev, ODANT 2018
+# Dmitriy Vetutnev, ODANT 2018, 2020
 
 
 from conans import ConanFile, MSBuild, tools
-from conans.errors import ConanException
 import os, glob
-
-
-def get_safe(options, name):
-    try:
-        return getattr(options, name, None)
-    except ConanException:
-        return None
 
 
 class FreeImageConan(ConanFile):
     name = "freeimage"
-    version = "3.18.0+5"
+    version = "3.18.0+6"
     license = "FreeImage is licensed under the GNU General Public License, version 2.0 (GPLv2) or version 3.0 (GPLv3), and the FreeImage Public License (FIPL)"
     description = "FreeImage is an Open Source library project for developers who would like to support popular graphics image formats like PNG, BMP, JPEG, TIFF and others as needed by today's multimedia applications"
     url = "https://github.com/odant/conan-freeimage"
@@ -29,7 +21,9 @@ class FreeImageConan(ConanFile):
     options = {
         "dll_sign": [True, False]
     }
-    default_options = "dll_sign=True"
+    default_options = {
+        "dll_sign": True
+    }
     exports_sources = "src/*"
     no_copy_source = False
     build_policy = "missing"
@@ -42,7 +36,7 @@ class FreeImageConan(ConanFile):
         del self.settings.compiler.libcxx
 
     def build_requirements(self):
-        if get_safe(self.options, "dll_sign"):
+        if self.options.get_safe("dll_sign"):
             self.build_requires("windows_signtool/[~=1.1]@%s/stable" % self.user)
 
     def build(self):
@@ -92,7 +86,7 @@ class FreeImageConan(ConanFile):
                 self.copy("FreeImaged.dll", dst="bin", src=debugPath, keep_path=False)
                 self.copy("FreeImaged.pdb", dst="bin", src=debugPath, keep_path=False)
             # Sign DLL
-            if get_safe(self.options, "dll_sign"):
+            if self.options.get_safe("dll_sign"):
                 import windows_signtool
                 pattern = os.path.join(self.package_folder, "bin", "*.dll")
                 for fpath in glob.glob(pattern):
@@ -106,7 +100,7 @@ class FreeImageConan(ConanFile):
         if self.settings.os == "Linux":
             self.copy("libfreeimage-3.18.0.so", dst="lib", src="src", keep_path=False)
             with tools.chdir(os.path.join(self.package_folder, "lib")):
-                self.run("ln -s libfreeimage-3.18.0.so libfreeimage.so.3")
+                self.run("ln --symbolic libfreeimage-3.18.0.so libfreeimage.so.3")
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
