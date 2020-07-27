@@ -32,8 +32,6 @@ class FreeImageConan(ConanFile):
         # DLL sign
         if self.settings.os != "Windows":
             del self.options.dll_sign
-        # Pure C library
-        del self.settings.compiler.libcxx
 
     def build_requirements(self):
         if self.options.get_safe("dll_sign"):
