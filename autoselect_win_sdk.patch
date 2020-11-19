@@ -1,0 +1,182 @@
+diff --git a/src/FreeImage.2017.vcxproj b/src/FreeImage.2017.vcxproj
+index f843ef2..913bf40 100644
+--- a/src/FreeImage.2017.vcxproj
++++ b/src/FreeImage.2017.vcxproj
+@@ -22,7 +22,8 @@
+     <ProjectName>FreeImage</ProjectName>
+     <ProjectGuid>{B39ED2B3-D53A-4077-B957-930979A3577D}</ProjectGuid>
+     <RootNamespace>FreeImage</RootNamespace>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/src/Source/FreeImageLib/FreeImageLib.2017.vcxproj b/src/Source/FreeImageLib/FreeImageLib.2017.vcxproj
+index 2d1685e..51fa8c8 100644
+--- a/src/Source/FreeImageLib/FreeImageLib.2017.vcxproj
++++ b/src/Source/FreeImageLib/FreeImageLib.2017.vcxproj
+@@ -22,7 +22,8 @@
+     <ProjectName>FreeImageLib</ProjectName>
+     <ProjectGuid>{9E219DF2-315D-478E-8A07-8960C377CE1E}</ProjectGuid>
+     <RootNamespace>FreeImageLib</RootNamespace>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+diff --git a/src/Source/LibJPEG/LibJPEG.2017.vcxproj b/src/Source/LibJPEG/LibJPEG.2017.vcxproj
+index e97ab6e..c299621 100644
+--- a/src/Source/LibJPEG/LibJPEG.2017.vcxproj
++++ b/src/Source/LibJPEG/LibJPEG.2017.vcxproj
+@@ -22,7 +22,8 @@
+     <ProjectName>LibJPEG</ProjectName>
+     <ProjectGuid>{5E1D4E5F-E10C-4BA3-B663-F33014FD21D9}</ProjectGuid>
+     <RootNamespace>LibJPEG</RootNamespace>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+diff --git a/src/Source/LibJXR/LibJXR.2017.vcxproj b/src/Source/LibJXR/LibJXR.2017.vcxproj
+index 4e79b21..29b48ff 100644
+--- a/src/Source/LibJXR/LibJXR.2017.vcxproj
++++ b/src/Source/LibJXR/LibJXR.2017.vcxproj
+@@ -23,7 +23,8 @@
+     <ProjectGuid>{244455E0-5F25-4451-9540-F317883E52A8}</ProjectGuid>
+     <RootNamespace>LibJXR</RootNamespace>
+     <Keyword>Win32Proj</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+diff --git a/src/Source/LibOpenJPEG/LibOpenJPEG.2017.vcxproj b/src/Source/LibOpenJPEG/LibOpenJPEG.2017.vcxproj
+index 4f36391..2aaa9d4 100644
+--- a/src/Source/LibOpenJPEG/LibOpenJPEG.2017.vcxproj
++++ b/src/Source/LibOpenJPEG/LibOpenJPEG.2017.vcxproj
+@@ -22,7 +22,8 @@
+     <ProjectName>LibOpenJPEG</ProjectName>
+     <ProjectGuid>{E3536C28-A7F1-4B53-8E52-7D2232F9E098}</ProjectGuid>
+     <RootNamespace>LibOpenJPEG</RootNamespace>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/src/Source/LibPNG/LibPNG.2017.vcxproj b/src/Source/LibPNG/LibPNG.2017.vcxproj
+index bdd0e7e..cd69783 100644
+--- a/src/Source/LibPNG/LibPNG.2017.vcxproj
++++ b/src/Source/LibPNG/LibPNG.2017.vcxproj
+@@ -22,7 +22,8 @@
+     <ProjectName>LibPNG</ProjectName>
+     <ProjectGuid>{7DB10B50-CE00-4D7A-B322-6824F05D2FCB}</ProjectGuid>
+     <RootNamespace>LibPNG</RootNamespace>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/src/Source/LibRawLite/LibRawLite.2017.vcxproj b/src/Source/LibRawLite/LibRawLite.2017.vcxproj
+index 93451c6..afcf8f8 100644
+--- a/src/Source/LibRawLite/LibRawLite.2017.vcxproj
++++ b/src/Source/LibRawLite/LibRawLite.2017.vcxproj
+@@ -23,7 +23,8 @@
+     <ProjectGuid>{07F662C1-1323-42AB-B6AF-FBFD34A7437A}</ProjectGuid>
+     <RootNamespace>LibRawLite</RootNamespace>
+     <Keyword>Win32Proj</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+diff --git a/src/Source/LibTIFF4/LibTIFF4.2017.vcxproj b/src/Source/LibTIFF4/LibTIFF4.2017.vcxproj
+index 4b50c61..2f3b83b 100644
+--- a/src/Source/LibTIFF4/LibTIFF4.2017.vcxproj
++++ b/src/Source/LibTIFF4/LibTIFF4.2017.vcxproj
+@@ -22,7 +22,8 @@
+     <ProjectName>LibTIFF4</ProjectName>
+     <ProjectGuid>{EC085CBD-E9C3-477F-9A97-CB9D5DA30E27}</ProjectGuid>
+     <RootNamespace>LibTIFF4</RootNamespace>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/src/Source/LibWebP/LibWebP.2017.vcxproj b/src/Source/LibWebP/LibWebP.2017.vcxproj
+index 13a5f12..464751f 100644
+--- a/src/Source/LibWebP/LibWebP.2017.vcxproj
++++ b/src/Source/LibWebP/LibWebP.2017.vcxproj
+@@ -23,7 +23,8 @@
+     <ProjectGuid>{097D9F6C-FD0E-4CBC-9676-009012AAECA8}</ProjectGuid>
+     <RootNamespace>LibWebP</RootNamespace>
+     <Keyword>Win32Proj</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+diff --git a/src/Source/OpenEXR/OpenEXR.2017.vcxproj b/src/Source/OpenEXR/OpenEXR.2017.vcxproj
+index 7e9704f..bd3ea49 100644
+--- a/src/Source/OpenEXR/OpenEXR.2017.vcxproj
++++ b/src/Source/OpenEXR/OpenEXR.2017.vcxproj
+@@ -22,7 +22,8 @@
+     <ProjectName>OpenEXR</ProjectName>
+     <ProjectGuid>{17A4874B-0606-4687-90B6-F91F8CB3B8AF}</ProjectGuid>
+     <RootNamespace>OpenEXR</RootNamespace>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/src/Source/ZLib/ZLib.2017.vcxproj b/src/Source/ZLib/ZLib.2017.vcxproj
+index 38181f1..6288538 100644
+--- a/src/Source/ZLib/ZLib.2017.vcxproj
++++ b/src/Source/ZLib/ZLib.2017.vcxproj
+@@ -22,7 +22,8 @@
+     <ProjectName>ZLib</ProjectName>
+     <ProjectGuid>{33134F61-C1AD-4B6F-9CEA-503A9F140C52}</ProjectGuid>
+     <RootNamespace>ZLib</RootNamespace>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+diff --git a/src/TestAPI/Test.2017.vcxproj b/src/TestAPI/Test.2017.vcxproj
+index d22558a..34980e7 100644
+--- a/src/TestAPI/Test.2017.vcxproj
++++ b/src/TestAPI/Test.2017.vcxproj
+@@ -22,7 +22,8 @@
+     <ProjectName>Test</ProjectName>
+     <ProjectGuid>{47EC92F9-8B13-4A52-B80E-9EEC1BFFED99}</ProjectGuid>
+     <RootNamespace>Test</RootNamespace>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/src/Wrapper/FreeImagePlus/FreeImagePlus.2017.vcxproj b/src/Wrapper/FreeImagePlus/FreeImagePlus.2017.vcxproj
+index e35c6c2..a36f534 100644
+--- a/src/Wrapper/FreeImagePlus/FreeImagePlus.2017.vcxproj
++++ b/src/Wrapper/FreeImagePlus/FreeImagePlus.2017.vcxproj
+@@ -22,7 +22,8 @@
+     <ProjectName>FreeImagePlus</ProjectName>
+     <ProjectGuid>{94F36908-A4E2-4533-939D-64FF6EADA5A1}</ProjectGuid>
+     <RootNamespace>FreeImagePlus</RootNamespace>
+-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
++    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
++	<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

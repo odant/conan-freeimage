@@ -24,7 +24,7 @@ class FreeImageConan(ConanFile):
     default_options = {
         "dll_sign": True
     }
-    exports_sources = "src/*"
+    exports_sources = "src/*", "autoselect_win_sdk.patch"
     no_copy_source = False
     build_policy = "missing"
 
@@ -36,6 +36,9 @@ class FreeImageConan(ConanFile):
     def build_requirements(self):
         if self.options.get_safe("dll_sign"):
             self.build_requires("windows_signtool/[~=1.1]@%s/stable" % self.user)
+
+    def source(self):
+        tools.patch(patch_file="autoselect_win_sdk.patch")
 
     def build(self):
         if self.settings.compiler == "Visual Studio":
