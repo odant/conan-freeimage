@@ -8,7 +8,7 @@ import os, glob
 
 class FreeImageConan(ConanFile):
     name = "freeimage"
-    version = "3.18.0+6"
+    version = "3.18.0+7"
     license = "FreeImage is licensed under the GNU General Public License, version 2.0 (GPLv2) or version 3.0 (GPLv3), and the FreeImage Public License (FIPL)"
     description = "FreeImage is an Open Source library project for developers who would like to support popular graphics image formats like PNG, BMP, JPEG, TIFF and others as needed by today's multimedia applications"
     url = "https://github.com/odant/conan-freeimage"
@@ -24,7 +24,7 @@ class FreeImageConan(ConanFile):
     default_options = {
         "dll_sign": True
     }
-    exports_sources = "src/*"
+    exports_sources = "src/*", "autoselect_win_sdk.patch"
     no_copy_source = False
     build_policy = "missing"
 
@@ -36,6 +36,9 @@ class FreeImageConan(ConanFile):
     def build_requirements(self):
         if self.options.get_safe("dll_sign"):
             self.build_requires("windows_signtool/[~=1.1]@%s/stable" % self.user)
+
+    def source(self):
+        tools.patch(patch_file="autoselect_win_sdk.patch")
 
     def build(self):
         if self.settings.compiler == "Visual Studio":
