@@ -54,7 +54,7 @@ class FreeImageConan(ConanFile):
     def unix_build(self):
         build_env = {
             "CFLAGS": "-fPIC -fexceptions -fvisibility=hidden",
-            "CXXFLAGS": "-fPIC -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy"
+            "CXXFLAGS": "-fPIC -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy -std=c++14"
         }
         if self.settings.build_type == "Debug":
             build_env["CFLAGS"] = "-Og -g -ggdb " + build_env["CFLAGS"]
