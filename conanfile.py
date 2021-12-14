@@ -8,7 +8,7 @@ import os, glob
 
 class FreeImageConan(ConanFile):
     name = "freeimage"
-    version = "3.18.0+8"
+    version = "3.19.0-beta1+0"
     license = "FreeImage is licensed under the GNU General Public License, version 2.0 (GPLv2) or version 3.0 (GPLv3), and the FreeImage Public License (FIPL)"
     description = "FreeImage is an Open Source library project for developers who would like to support popular graphics image formats like PNG, BMP, JPEG, TIFF and others as needed by today's multimedia applications"
     url = "https://github.com/odant/conan-freeimage"
@@ -99,9 +99,9 @@ class FreeImageConan(ConanFile):
                         self.run(cmd)
         # GNU
         if self.settings.os == "Linux":
-            self.copy("libfreeimage-3.18.0.so", dst="lib", src="src", keep_path=False)
+            self.copy("libfreeimage-3.19.0.so", dst="lib", src="src", keep_path=False)
             with tools.chdir(os.path.join(self.package_folder, "lib")):
-                self.run("ln --symbolic libfreeimage-3.18.0.so libfreeimage.so.3")
+                self.run("ln --symbolic libfreeimage-3.19.0.so libfreeimage.so.3")
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
