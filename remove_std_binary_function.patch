@@ -1,0 +1,13 @@
+diff --git a/src/Source/OpenEXR/IlmImf/ImfAttribute.cpp b/src/Source/OpenEXR/IlmImf/ImfAttribute.cpp
+index cb4ac36..a69840e 100644
+--- a/src/Source/OpenEXR/IlmImf/ImfAttribute.cpp
++++ b/src/Source/OpenEXR/IlmImf/ImfAttribute.cpp
+@@ -63,7 +63,7 @@ Attribute::~Attribute () {}
+ 
+ namespace {
+ 
+-struct NameCompare: std::binary_function <const char *, const char *, bool>
++struct NameCompare
+ {
+     bool
+     operator () (const char *x, const char *y) const

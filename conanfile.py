@@ -24,7 +24,7 @@ class FreeImageConan(ConanFile):
     default_options = {
         "dll_sign": True
     }
-    exports_sources = "src/*", "autoselect_win_sdk.patch", "fix_sources_list.patch", "fix_dll_version.patch"
+    exports_sources = "src/*", "autoselect_win_sdk.patch", "fix_sources_list.patch", "fix_dll_version.patch", "remove_std_binary_function.patch"
     no_copy_source = False
     build_policy = "missing"
 
@@ -41,6 +41,7 @@ class FreeImageConan(ConanFile):
         tools.patch(patch_file="autoselect_win_sdk.patch")
         if self.settings.os == "Windows":
             tools.patch(patch_file="fix_dll_version.patch")
+            tools.patch(patch_file="remove_std_binary_function.patch")
         else:
             tools.patch(patch_file="fix_sources_list.patch")
 
@@ -53,6 +54,7 @@ class FreeImageConan(ConanFile):
     def msvc_build(self):
         with tools.chdir("src"):
             builder = MSBuild(self)
+            #builder.build_env.cxx_flags = ["/std=c++14"]
             builder.build("FreeImage.2017.vcxproj", upgrade_project=False)
 
     def unix_build(self):
