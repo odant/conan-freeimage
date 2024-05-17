@@ -1,0 +1,13 @@
+diff --git a/src/Makefile.gnu b/src/Makefile.gnu
+index a4f2601..a6b160c 100644
+--- a/src/Makefile.gnu
++++ b/src/Makefile.gnu
+@@ -25,6 +25,8 @@ CFLAGS += -DNO_LCMS
+ # LibJXR
+ CFLAGS += -DDISABLE_PERF_MEASUREMENT -D__ANSI__
+ CFLAGS += $(INCLUDE)
++# Fixed gcc 14.1 build
++CFLAGS += -Wno-error=implicit-function-declaration
+ 
+ # C++ flags
+ CXXFLAGS ?= -std=c++0x -O3 -fPIC -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy
