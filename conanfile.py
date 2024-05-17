@@ -8,7 +8,7 @@ import os, glob
 
 class FreeImageConan(ConanFile):
     name = "freeimage"
-    version = "3.19.0-beta3+0"
+    version = "3.19.0-beta3+1"
     license = "FreeImage is licensed under the GNU General Public License, version 2.0 (GPLv2) or version 3.0 (GPLv3), and the FreeImage Public License (FIPL)"
     description = "FreeImage is an Open Source library project for developers who would like to support popular graphics image formats like PNG, BMP, JPEG, TIFF and others as needed by today's multimedia applications"
     url = "https://github.com/odant/conan-freeimage"
