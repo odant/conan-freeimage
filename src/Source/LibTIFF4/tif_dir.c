@@ -211,7 +211,7 @@ static uint16_t countInkNamesString(TIFF *tif, uint32_t slen, const char *s)
     }
 bad:
     TIFFErrorExtR(tif, "TIFFSetField",
-                  "%s: Invalid InkNames value; no null at given buffer end "
+                  "%s: Invalid InkNames value; no NUL at given buffer end "
                   "location %" PRIu32 ", after %" PRIu16 " ink",
                   tif->tif_name, slen, i);
     return (0);
@@ -1652,16 +1652,6 @@ void TIFFFreeDirectory(TIFF *tif)
 
     _TIFFmemset(&(td->td_stripoffset_entry), 0, sizeof(TIFFDirEntry));
     _TIFFmemset(&(td->td_stripbytecount_entry), 0, sizeof(TIFFDirEntry));
-
-    /* Reset some internal parameters for IFD data size checking. */
-    tif->tif_dir.td_dirdatasize_read = 0;
-    tif->tif_dir.td_dirdatasize_write = 0;
-    if (tif->tif_dir.td_dirdatasize_offsets != NULL)
-    {
-        _TIFFfreeExt(tif, tif->tif_dir.td_dirdatasize_offsets);
-        tif->tif_dir.td_dirdatasize_offsets = NULL;
-        tif->tif_dir.td_dirdatasize_Noffsets = 0;
-    }
 }
 #undef CleanupField
 
@@ -1686,8 +1676,6 @@ TIFFExtendProc TIFFSetTagExtender(TIFFExtendProc extender)
  */
 int TIFFCreateDirectory(TIFF *tif)
 {
-    /* Free previously allocated memory and setup default values. */
-    TIFFFreeDirectory(tif);
     TIFFDefaultDirectory(tif);
     tif->tif_diroff = 0;
     tif->tif_nextdiroff = 0;
@@ -1700,8 +1688,6 @@ int TIFFCreateDirectory(TIFF *tif)
 
 int TIFFCreateCustomDirectory(TIFF *tif, const TIFFFieldArray *infoarray)
 {
-    /* Free previously allocated memory and setup default values. */
-    TIFFFreeDirectory(tif);
     TIFFDefaultDirectory(tif);
 
     /*
@@ -2165,22 +2151,17 @@ int TIFFSetSubDirectory(TIFF *tif, uint64_t diroff)
         else
             tif->tif_curdir++;
     }
-    if (probablySubIFD)
+    if (retval && probablySubIFD)
     {
-        if (retval)
-        {
-            /* Reset IFD list to start new one for SubIFD chain and also start
-             * SubIFD chain with tif_curdir=0. */
-            /* invalidate IFD loop lists */
-            _TIFFCleanupIFDOffsetAndNumberMaps(tif);
-            tif->tif_curdir = 0; /* first directory of new chain */
-            /* add this offset to new IFD list */
-            _TIFFCheckDirNumberAndOffset(tif, tif->tif_curdir, diroff);
-        }
+        /* Reset IFD list to start new one for SubIFD chain and also start
+         * SubIFD chain with tif_curdir=0. */
+        _TIFFCleanupIFDOffsetAndNumberMaps(tif); /* invalidate IFD loop lists */
+        tif->tif_curdir = 0; /* first directory of new chain */
+        /* add this offset to new IFD list */
+        _TIFFCheckDirNumberAndOffset(tif, tif->tif_curdir, diroff);
         /* To be able to return from SubIFD or custom-IFD to main-IFD */
         tif->tif_setdirectory_force_absolute = TRUE;
     }
-
     return (retval);
 }
 
@@ -2276,11 +2257,9 @@ int TIFFUnlinkDirectory(TIFF *tif, tdir_t dirn)
     }
     else
     {
-        /* Need local swap because nextdir has to be used unswapped below. */
-        uint64_t nextdir64 = nextdir;
         if (tif->tif_flags & TIFF_SWAB)
-            TIFFSwabLong8(&nextdir64);
-        if (!WriteOK(tif, &nextdir64, sizeof(uint64_t)))
+            TIFFSwabLong8(&nextdir);
+        if (!WriteOK(tif, &nextdir, sizeof(uint64_t)))
         {
             TIFFErrorExtR(tif, module, "Error writing directory link");
             return (0);

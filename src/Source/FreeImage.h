@@ -148,24 +148,52 @@ FI_STRUCT (FIMULTIBITMAP) { void *data; };
 #endif
 
 #ifndef _MSC_VER
-// define portable types for 32-bit / 64-bit OS
-#include <inttypes.h>
-typedef int32_t BOOL;
-typedef uint8_t BYTE;
-typedef uint16_t WORD;
-typedef uint32_t DWORD;
-typedef int32_t LONG;
-typedef int64_t INT64;
-typedef uint64_t UINT64;
+    // define portable types for 32-bit / 64-bit OS
+    #include <inttypes.h>
+    #ifndef BOOL
+        #define BOOL int32_t
+    #endif
+    #ifndef BYTE
+        #define BYTE uint8_t
+    #endif
+    #ifndef WORD
+        #define WORD uint16_t
+    #endif
+    #ifndef DWORD
+        #define DWORD uint32_t
+    #endif
+    #ifndef LONG
+        #define LONG int32_t
+    #endif
+    #ifndef INT64
+        #define INT64 int64_t
+    #endif
+    #ifndef UINT64
+        #define UINT64 uint64_t
+    #endif
 #else
-// MS is not C99 ISO compliant
-typedef long BOOL;
-typedef unsigned char BYTE;
-typedef unsigned short WORD;
-typedef unsigned long DWORD;
-typedef long LONG;
-typedef signed __int64 INT64;
-typedef unsigned __int64 UINT64;
+    // MS is not C99 ISO compliant
+    #ifndef BOOL
+        #define BOOL long
+    #endif
+    #ifndef BYTE
+        #define BYTE unsigned char
+    #endif
+    #ifndef WORD
+        #define WORD unsigned short
+    #endif
+    #ifndef DWORD
+        #define DWORD unsigned long
+    #endif
+    #ifndef LONG
+        #define LONG long
+    #endif
+    #ifndef INT64
+        #define INT64 signed __int64
+    #endif
+    #ifndef UINT64
+        #define UINT64 unsigned __int64
+    #endif
 #endif // _MSC_VER
 
 #if (defined(_WIN32) || defined(__WIN32__))

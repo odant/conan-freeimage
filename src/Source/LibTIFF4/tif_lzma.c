@@ -58,9 +58,9 @@ typedef struct
     TIFFVSetMethod vsetparent; /* super-class method */
 } LZMAState;
 
-#define GetLZMAState(tif) ((LZMAState *)(tif)->tif_data)
-#define LZMADecoderState(tif) GetLZMAState(tif)
-#define LZMAEncoderState(tif) GetLZMAState(tif)
+#define LState(tif) ((LZMAState *)(tif)->tif_data)
+#define DecoderState(tif) LState(tif)
+#define EncoderState(tif) LState(tif)
 
 static int LZMAEncode(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s);
 static int LZMADecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s);
@@ -106,7 +106,7 @@ static int LZMAFixupTags(TIFF *tif)
 
 static int LZMASetupDecode(TIFF *tif)
 {
-    LZMAState *sp = LZMADecoderState(tif);
+    LZMAState *sp = DecoderState(tif);
 
     assert(sp != NULL);
 
@@ -127,7 +127,7 @@ static int LZMASetupDecode(TIFF *tif)
 static int LZMAPreDecode(TIFF *tif, uint16_t s)
 {
     static const char module[] = "LZMAPreDecode";
-    LZMAState *sp = LZMADecoderState(tif);
+    LZMAState *sp = DecoderState(tif);
     lzma_ret ret;
 
     (void)s;
@@ -162,7 +162,7 @@ static int LZMAPreDecode(TIFF *tif, uint16_t s)
 static int LZMADecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
 {
     static const char module[] = "LZMADecode";
-    LZMAState *sp = LZMADecoderState(tif);
+    LZMAState *sp = DecoderState(tif);
 
     (void)s;
     assert(sp != NULL);
@@ -232,7 +232,7 @@ static int LZMADecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
 
 static int LZMASetupEncode(TIFF *tif)
 {
-    LZMAState *sp = LZMAEncoderState(tif);
+    LZMAState *sp = EncoderState(tif);
 
     assert(sp != NULL);
     if (sp->state & LSTATE_INIT_DECODE)
@@ -251,7 +251,7 @@ static int LZMASetupEncode(TIFF *tif)
 static int LZMAPreEncode(TIFF *tif, uint16_t s)
 {
     static const char module[] = "LZMAPreEncode";
-    LZMAState *sp = LZMAEncoderState(tif);
+    LZMAState *sp = EncoderState(tif);
     lzma_ret ret;
 
     (void)s;
@@ -283,7 +283,7 @@ static int LZMAPreEncode(TIFF *tif, uint16_t s)
 static int LZMAEncode(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
 {
     static const char module[] = "LZMAEncode";
-    LZMAState *sp = LZMAEncoderState(tif);
+    LZMAState *sp = EncoderState(tif);
 
     assert(sp != NULL);
     assert(sp->state == LSTATE_INIT_ENCODE);
@@ -329,7 +329,7 @@ static int LZMAEncode(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
 static int LZMAPostEncode(TIFF *tif)
 {
     static const char module[] = "LZMAPostEncode";
-    LZMAState *sp = LZMAEncoderState(tif);
+    LZMAState *sp = EncoderState(tif);
     lzma_ret ret;
 
     sp->stream.avail_in = 0;
@@ -365,7 +365,7 @@ static int LZMAPostEncode(TIFF *tif)
 
 static void LZMACleanup(TIFF *tif)
 {
-    LZMAState *sp = GetLZMAState(tif);
+    LZMAState *sp = LState(tif);
 
     assert(sp != 0);
 
@@ -388,7 +388,7 @@ static void LZMACleanup(TIFF *tif)
 static int LZMAVSetField(TIFF *tif, uint32_t tag, va_list ap)
 {
     static const char module[] = "LZMAVSetField";
-    LZMAState *sp = GetLZMAState(tif);
+    LZMAState *sp = LState(tif);
 
     switch (tag)
     {
@@ -414,7 +414,7 @@ static int LZMAVSetField(TIFF *tif, uint32_t tag, va_list ap)
 
 static int LZMAVGetField(TIFF *tif, uint32_t tag, va_list ap)
 {
-    LZMAState *sp = GetLZMAState(tif);
+    LZMAState *sp = LState(tif);
 
     switch (tag)
     {
@@ -457,7 +457,7 @@ int TIFFInitLZMA(TIFF *tif, int scheme)
     tif->tif_data = (uint8_t *)_TIFFmallocExt(tif, sizeof(LZMAState));
     if (tif->tif_data == NULL)
         goto bad;
-    sp = GetLZMAState(tif);
+    sp = LState(tif);
     memcpy(&sp->stream, &tmp_stream, sizeof(lzma_stream));
 
     /*
