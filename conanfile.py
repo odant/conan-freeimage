@@ -43,14 +43,15 @@ class FreeImageConan(ConanFile):
         benv.generate()
         renv = tools.env.VirtualRunEnv(self)
         renv.generate()
-        if tools.microsoft.is_msvc(self):
+        if self.settings.os == "Windows" and (self.settings.compiler == "msvc" or ( self.settings.compiler == "clang" and self.settings.compiler.get_safe("runtime_version"))):
             mstc = tools.microsoft.MSBuildToolchain(self)
+            mstc.cppstd = "14"
             mstc.generate()
             
     def build(self):
         if self.settings.compiler == "gcc": 
             tools.files.patch(self, patch_file="fix_gcc14_build.patch")
-        if tools.microsoft.is_msvc(self):
+        if self.settings.os == "Windows" and (self.settings.compiler == "msvc" or ( self.settings.compiler == "clang" and self.settings.compiler.get_safe("runtime_version"))):
             self.msvc_build()
         else:
             self.unix_build()
@@ -59,11 +60,22 @@ class FreeImageConan(ConanFile):
         with tools.files.chdir(self, "src"):
             projectFile = "FreeImage.2017.vcxproj"
             self.run(f"devenv {projectFile} /upgrade")
-            builder = tools.microsoft.MSBuild(self)
+            msbuild = tools.microsoft.MSBuild(self)
             # use Release instead of the RelWithDebInfo
-            builder.build_type = "Release" if self.settings.build_type == "RelWithDebInfo" else builder.build_type
-            #builder.build_env.cxx_flags = ["/std=c++14"]
-            builder.build(projectFile)
+            msbuild.build_type = "Release" if self.settings.build_type == "RelWithDebInfo" else msbuild.build_type
+            #msbuild.build_env.cxx_flags = ["/std=c++14"]
+            # use Win32 instead of the default value when building x86
+            msbuild.platform = "Win32" if self.settings.arch == "x86" else msbuild.platform                
+            cmd = msbuild.command(projectFile, targets=["Build"])
+            props_file = os.path.join(self.build_folder, "conantoolchain.props")
+            if not os.path.isfile(props_file):
+                 raise Exception("File conantoolchain.props not found!")
+            if self.settings.compiler == "clang" and self.settings.compiler.get_safe("runtime_version"):
+                tools.files.replace_in_file(self, props_file, "</Project>", "<PropertyGroup Label=\"Configuration\"><PlatformToolset>ClangCl</PlatformToolset></PropertyGroup></Project>");
+            cmd += ' -p:ForceImportBeforeCppTargets="%s"' % props_file
+            cmd += ' -clp:NoItemAndPropertyList;PerformanceSummary;Verbosity=minimal -nologo'
+            self.output.info(f"Run MSBuild command: {cmd}")    
+            self.run(cmd)
 
     def unix_build(self):
         env = tools.env.Environment()
